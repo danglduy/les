@@ -37,9 +37,6 @@ v_install_mdb=false
 #Install mysql for ubuntu instead of mariadb. Option: true/false
 v_install_mysql_ubuntu=false
 
-#Install Rails with Postgres? Option: true/false
-v_install_rails=false
-
 #Install web server? Option: true/false
 v_install_http_srv=false
 
