@@ -54,11 +54,6 @@ if [ $v_install_mdb == true ]; then
   f_secure_db
 fi
 
-if [ $v_install_rails == true ]; then
-  v_portslist+=(3000 5000)
-  f_install_rails
-fi
-
 if [ $v_install_firewall == true ]; then
   f_install_firewall
 fi
