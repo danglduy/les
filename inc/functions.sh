@@ -97,6 +97,7 @@ function f_install_gui() {
   apt-get -y install xfce4 xfce4-goodies gnome-icon-theme
   f_install_sublimetext
   f_install_vncserver
+  f_config_nano
 }
 
 function f_install_essential_packages() {
