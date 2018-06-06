@@ -55,13 +55,10 @@ function f_create_swap() {
   fi
 }
 
-function f_config_nano_erb() {
-  #Nano config for erb
-  wget -P /usr/share/nano/ https://raw.githubusercontent.com/scopatz/nanorc/master/erb.nanorc
+function f_config_nano() {
   sudo -u $user cat <<EOT >> /home/$user/.nanorc
   set tabsize 2
   set tabstospaces
-  include "/usr/share/nano/erb.nanorc"
 EOT
 }
 
@@ -155,34 +152,6 @@ function f_secure_db() {
   UPDATE mysql.user SET plugin='' WHERE user='root';
   FLUSH PRIVILEGES;
 EOF
-}
-
-function f_install_rails() {
-
-  f_disable_sudo_password_for_apt
-  #Install rvm, ruby and rails stable for $user user
-  sudo -u $user gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-  sudo -u $user \curl -sSL https://get.rvm.io | sudo -u $user bash -s stable --rails
-  f_enable_sudo_password_for_apt
-
-  #Postgresql certificate & repo
-  wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-  cat <<EOT >> /etc/apt/sources.list.d/pgdg.list
-  deb http://apt.postgresql.org/pub/repos/apt/ $distro_code-pgdg main
-EOT
-
-  #NodeJS certificate & repo
-  curl -sL https://deb.nodesource.com/setup_8.x | bash -
-
-  #Yarn certificate & repo
-  curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-  echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-
-  apt-get -y update
-  apt-get -y install postgresql-10 postgresql-client-10 libpq-dev \
-                      nodejs \
-                      yarn
-  f_config_nano_erb
 }
 
 function f_install_firewall() {
