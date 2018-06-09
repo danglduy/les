@@ -1,0 +1,26 @@
+server {
+        server_name domain_name;
+        return 301 $scheme://domain_name$request_uri;
+}
+
+server {
+        listen       80;
+        listen       [::]:80;
+        server_name  domain_name;
+        location / {
+            root   /var/www/vhosts/domain_name;
+            index  index.html index.htm index.php;
+        }
+
+        location ~ \.php$ {
+            root           /var/www/vhosts/domain_name;
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME      $request_filename;
+            include        fastcgi_params;
+        }
+
+        location ~ /\.ht {
+            deny  all;
+        }
+}
