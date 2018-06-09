@@ -1,5 +1,6 @@
 server {
-        server_name domain_name;
+        # Redirect www to non-www. Reverse if you want.
+        server_name www.domain_name;
         return 301 $scheme://domain_name$request_uri;
 }
 
