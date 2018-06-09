@@ -109,9 +109,19 @@ function f_install_apache() {
   apt-get -y install httpd
 }
 
+function f_config_nginx() {
+  rm /etc/nginx/sites-available/default  
+  
+  curl https://raw.githubusercontent.com/zldang/les/master/inc/nginx/default -o /etc/nginx/sites-available/default
+  ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
+}
+
 function f_install_nginx() {
   apt-get -y install nginx-extras
+  f_config_nginx
 }
+
 
 function f_install_php() {
   #PHP
