@@ -4,26 +4,26 @@ function f_create_user() {
   read -p "Your username: " user
   printf "\n"
   adduser --gecos GECOS $user
-  #Add user $user to sudo group
+  # Add user $user to sudo group
   usermod -a -G sudo $user
 }
 
 function f_disable_root_ssh_login() {
-  #Disable SSH Root Login
+  # Disable SSH Root Login
   sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
 }
 
 function f_disable_ssh_password() {
-  #Disable SSH Password Authentication
+  # Disable SSH Password Authentication
   sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
   sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 }
 
 function f_create_ssh_key() {
   v_root_ssh_keypath="/root/.ssh/authorized_keys"
-  #Check root ssh key exist
+  # Check root ssh key exist
   if [ -f "$v_root_ssh_keypath" ]; then
-    #If exist copy the key to the user and delete the root's key folder
+    # If exist copy the key to the user and delete the root's key folder
     cp -R /root/.ssh /home/$user/.ssh
     chown -R $user:$user /home/$user/.ssh
     chmod 700 /home/$user/.ssh
@@ -31,7 +31,7 @@ function f_create_ssh_key() {
     rm -R /root/.ssh
   else
     sudo -u $user mkdir -p /home/$user/.ssh
-    #If not exist create key file to the user
+    # If not exist create key file to the user
     cat <<EOT >> /home/$user/.ssh/authorized_keys
     $publickey
 EOT
@@ -43,7 +43,7 @@ EOT
 }
 
 function f_create_swap() {
-  #Create swap disk image if the system doesn't have swap.
+  # Create swap disk image if the system doesn't have swap.
   checkswap="$(swapon --show)"
   if [ -z "$checkswap" ]; then
     mkdir -v /var/cache/swap
@@ -72,7 +72,7 @@ function f_enable_sudo_password_for_apt() {
 }
 
 function f_install_sublimetext() {
-  #Sublime Text
+  # Sublime Text
   wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | apt-key add -
   echo "deb https://download.sublimetext.com/ apt/stable/" | tee /etc/apt/sources.list.d/sublime-text.list
   apt-get update
@@ -81,7 +81,7 @@ function f_install_sublimetext() {
 
 function f_install_vncserver() {
   apt-get -y install vnc4server
-  #Create vncserver launch file
+  # Create vncserver launch file
   sudo -u $user touch /home/$user/vncserver.sh
   sudo -u $user chmod +x /home/$user/vncserver.sh
   if [ $v_vnc_localhost == true ]; then
@@ -92,7 +92,7 @@ function f_install_vncserver() {
 }
 
 function f_install_gui() {
-  #Install xfce, vnc server, sublime-text
+  # Install xfce, vnc server, sublime-text
   apt-get update
   apt-get -y install xfce4 xfce4-goodies gnome-icon-theme
   f_install_sublimetext
@@ -139,7 +139,7 @@ function f_install_nginx() {
 
 
 function f_install_php() {
-  #PHP
+  # PHP
   if [ $distro == "Debian" && $distro_code == "jessie" ]; then
     apt-get -y install php5-cli php5-fpm php5-mysqlnd php5-gd php5-mcrypt
   elif [ $distro == "Ubuntu" && $distro_code == "trusty" ]; then
