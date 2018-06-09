@@ -109,11 +109,26 @@ function f_install_apache() {
   apt-get -y install httpd
 }
 
+function f_add_domain() {
+  read -p "Add a domain (y/n)? " add_domain
+  printf "\n"
+  if [ $add_domain == "y" ]; then
+    read -p "Write your domain name: " domain_name
+    printf "\n"
+    mkdir /var/www/vhosts/$domain_name
+    curl https://raw.githubusercontent.com/zldang/les/master/inc/nginx/custom_domain -o /etc/nginx/sites-available/$domain_name
+    sed -i "s/domain_name/$domain_name/g" /etc/nginx/sites-available/$domain_name
+    ln -s /etc/nginx/sites-available/$domain_name /etc/nginx/sites-enabled/$domain_name
+  fi
+}
+
 function f_config_nginx() {
-  rm /etc/nginx/sites-available/default  
-  
+  rm /etc/nginx/sites-available/default
   curl https://raw.githubusercontent.com/zldang/les/master/inc/nginx/default -o /etc/nginx/sites-available/default
   ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+  mkdir /var/www/vhosts
+  f_add_domain
+  chown -R www-data:www-data /var/www/
 
 }
 
