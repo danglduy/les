@@ -123,17 +123,33 @@ function f_add_domain() {
 }
 
 function f_config_nginx() {
-  rm /etc/nginx/sites-available/default
+ 
+  rm /etc/nginx/nginx.conf
+  rm /etc/nginx/conf.d/*
+  
+  mkdir /etc/nginx/sites-available
+  mkdir /etc/nginx/sites-enabled
+  
+  curl https://raw.githubusercontent.com/zldang/les/master/inc/nginx/nginx_debian.conf -o /etc/nginx/nginx.conf
   curl https://raw.githubusercontent.com/zldang/les/master/inc/nginx/default -o /etc/nginx/sites-available/default
   ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-  mkdir /var/www/vhosts
+  mkdir -p /var/www/vhosts
+  mv /usr/share/nginx/html /var/www/  
+  rm -R /usr/share/nginx
   f_add_domain
-  chown -R www-data:www-data /var/www/
+  chown -R www-data:www-data /var/www
 
 }
 
 function f_install_nginx() {
-  apt-get -y install nginx-extras
+  wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
+  touch /etc/apt/sources.list.d/nginx.list
+  cat <<EOT > /etc/apt/sources.list.d/nginx.list
+    deb http://nginx.org/packages/$distro/ $distro_code nginx
+    deb-src http://nginx.org/packages/$distro/ $distro_code nginx
+EOT
+  apt-get -y update  
+  apt-get -y install nginx
   f_config_nginx
 }
 
@@ -151,8 +167,9 @@ function f_install_php() {
     bash -c "echo extension=mcrypt.so > /etc/php/7.2/fpm/conf.d/20-mcrypt.ini"
     bash -c "echo extension=mcrypt.so > /etc/php/7.2/cli/conf.d/20-mcrypt.ini"
   else
-    apt-get -y install apt-get -y install php-cli php-fpm php-mysql php-mbstring php-gd php-mcrypt
+    apt-get -y install php-cli php-fpm php-mysql php-mbstring php-gd php-mcrypt
   fi
+  chown -R www-data:www-data /var/lib/php/sessions
 }
 
 function f_install_openvpn() {
