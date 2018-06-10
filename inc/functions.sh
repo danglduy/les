@@ -123,33 +123,23 @@ function f_add_domain() {
 }
 
 function f_config_nginx() {
- 
+  cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
   rm /etc/nginx/nginx.conf
-  rm /etc/nginx/conf.d/*
-  
-  mkdir /etc/nginx/sites-available
-  mkdir /etc/nginx/sites-enabled
   
   curl https://raw.githubusercontent.com/zldang/les/master/inc/nginx/nginx_debian.conf -o /etc/nginx/nginx.conf
+  cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+  rm /etc/nginx/sites-available/default
   curl https://raw.githubusercontent.com/zldang/les/master/inc/nginx/default -o /etc/nginx/sites-available/default
   ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
   mkdir -p /var/www/vhosts
-  mv /usr/share/nginx/html /var/www/  
-  rm -R /usr/share/nginx
+
   f_add_domain
   chown -R www-data:www-data /var/www
 
 }
 
 function f_install_nginx() {
-  wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
-  touch /etc/apt/sources.list.d/nginx.list
-  cat <<EOT > /etc/apt/sources.list.d/nginx.list
-    deb http://nginx.org/packages/$distro/ $distro_code nginx
-    deb-src http://nginx.org/packages/$distro/ $distro_code nginx
-EOT
-  apt-get -y update  
-  apt-get -y install nginx
+  apt-get -y install nginx-extras
   f_config_nginx
 }
 
