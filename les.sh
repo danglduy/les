@@ -58,6 +58,7 @@ v_install_openvpn=false
 ### END OF SETTING VARIABLES SECTION
 
 distro="$(lsb_release -i -s)"
+distro="${distro,,}"
 distro_code="$(lsb_release -c -s)"
 
 # Make sure only root can run our script
