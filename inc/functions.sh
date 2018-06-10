@@ -156,11 +156,11 @@ EOT
 
 function f_install_php() {
   # PHP
-  if [ $distro == "Debian" && $distro_code == "jessie" ]; then
+  if [ $distro == "debian" && $distro_code == "jessie" ]; then
     apt-get -y install php5-cli php5-fpm php5-mysqlnd php5-gd php5-mcrypt
-  elif [ $distro == "Ubuntu" && $distro_code == "trusty" ]; then
+  elif [ $distro == "ubuntu" && $distro_code == "trusty" ]; then
     apt-get -y install php5-cli php5-fpm php5-mysqlnd php5-mbstring php5-gd php5-mcrypt
-  elif [ $distro == "Ubuntu" && $distro_code == "bionic" ]; then
+  elif [ $distro == "ubuntu" && $distro_code == "bionic" ]; then
     apt-get -y install php-cli php-fpm php-mysql php-mbstring php-gd php-pear php-dev
     apt-get -y install libmcrypt-dev libreadline-dev
     printf "\n" | pecl install mcrypt-1.0.1
