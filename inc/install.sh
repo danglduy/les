@@ -42,9 +42,9 @@ if [ $v_install_php == true ]; then
 fi
 
 if [ $v_install_mdb == true ]; then
-  if [ $distro == "Debian"  ]; then
+  if [ $distro == "debian"  ]; then
     f_install_mariadb
-  elif [ $distro == "Ubuntu" ]; then
+  elif [ $distro == "ubuntu" ]; then
     if [ $v_install_mysql_ubuntu == true ]; then
       f_install_mysql
     else
