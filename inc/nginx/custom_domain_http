@@ -8,8 +8,8 @@ server {
     listen       80;
     listen       [::]:80;
     server_name  domain_name;
-    root           /var/www/vhosts/domain_name;
-    index  index.html index.htm index.php;
+    root /var/www/vhosts/domain_name;
+    index index.html index.htm index.php;
 
     location / {
         try_files $uri $uri/ /index.php?$args;           
