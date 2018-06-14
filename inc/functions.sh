@@ -45,6 +45,11 @@ EOT
 function f_create_swap() {
   # Create swap disk image if the system doesn't have swap.
   checkswap="$(swapon --show)"
+  
+  if [ $centosver == "trusty" ]; then
+    checkswap="$(swapon --summary)"
+  fi
+  
   if [ -z "$checkswap" ]; then
     mkdir -v /var/cache/swap
     dd if=/dev/zero of=/var/cache/swap/swapfile bs=$v_swap_bs count=1M
