@@ -19,4 +19,4 @@ sudo certbot certonly \
   -d $domain_name \
   -d www.$domain_name
   
-sudo openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
+sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
